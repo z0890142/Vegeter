@@ -2,10 +2,13 @@ package main
 
 import (
 	"Vegeter/helper/Comman"
+	"Vegeter/helper/DB"
 	"Vegeter/router"
+	"log"
 	"net/http"
 	"strings"
 
+	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -20,9 +23,20 @@ func init() {
 }
 
 func main() {
-	// DB.CreateDbConn("mysql", viper.GetString("DB.connectString"), Log)
+	DB.CreateDbConn("mysql", viper.GetString("DB.connectString"), Log)
 	router := router.NewRouter()
-	http.ListenAndServe(":80", router)
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+
+		AllowedHeaders: []string{"Authorization", "Content-Type", "Access-Control-Allow-Origin"},
+		// Enable Debugging for testing, consider disabling in production
+		AllowedMethods: []string{"GET", "UPDATE", "PUT", "POST", "DELETE"},
+	})
+
+	log.Fatal(http.ListenAndServe(":80", c.Handler(router)))
+
 }
 
 func InitConfig() {

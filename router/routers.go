@@ -18,15 +18,25 @@ type Route struct {
 var routes []Route
 
 func init() {
-	register("POST", "/v1/smartlife/Register", controller.Register, nil)
-	register("POST", "/v1/smartlife/AddFriends", controller.AddFriend, nil)
-	register("POST", "/v1/smartlife/AddPrice", controller.AddPrice, nil)
+	register("POST", "/v1/Register", controller.Register, nil)
+	register("POST", "/v1/AddFriends", controller.AddFriend, nil)
+	register("POST", "/v1/AddPrice", controller.AddPrice, nil)
 
-	register("POST", "/v1/smartlife/GetCurrentPrice/{uuid}", controller.GetPriceRecord, nil)
+	register("PUT", "/v1/ConfirmFriend", controller.ConfirmFriend, nil)
+
+	register("GET", "/v1/GetFriends/{uuid}", controller.GetFriend, nil)
+	register("GET", "/v1/AddFriends/{uuid}", controller.GetAddFriend, nil)
+	register("GET", "/v1/GetCurrentPrice/{uuid}", controller.GetPriceRecord, nil)
+	register("GET", "/v1/GetAllPrice", controller.GetALLRecord, nil)
+
+	register("GET", "/v1/GetUserInfo/{uuid}", controller.GetUserInfo, nil)
+
+	register("GET", "/ws/{room}", controller.StartWebSocket, nil)
 
 }
 
 func NewRouter() *mux.Router {
+
 	r := mux.NewRouter()
 	for _, route := range routes {
 		r.Methods(route.Method).

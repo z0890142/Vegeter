@@ -11,6 +11,7 @@ import (
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 var Log *logrus.Entry

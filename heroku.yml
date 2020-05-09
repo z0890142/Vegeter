@@ -1,6 +1,5 @@
 build:
     languages:
-    - go
-    
-    run:
-    web: ./vegeter
+        - go
+run :
+    web : vegeter

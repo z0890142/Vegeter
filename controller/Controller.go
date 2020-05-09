@@ -281,6 +281,7 @@ func GetALLRecord(w http.ResponseWriter, r *http.Request) {
 	Comman.ResponseWithJson(w, http.StatusOK, response, Log)
 }
 
-func StartWebSocket(w http.ResponseWriter, r *http.Request) {
-	websocket.ServeWs(hub, w, r)
+func Test(w http.ResponseWriter, r *http.Request) {
+	Log, _ := Comman.LogInit("test", "Vegeter", logrus.DebugLevel)
+	Comman.ResponseWithJson(w, http.StatusOK, "hi", Log)
 }

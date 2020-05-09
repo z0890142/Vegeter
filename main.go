@@ -25,7 +25,6 @@ func init() {
 func main() {
 	DB.CreateDbConn("mysql", viper.GetString("DB.connectString"), Log)
 	router := router.NewRouter()
-
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,

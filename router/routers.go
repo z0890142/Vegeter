@@ -31,7 +31,7 @@ func init() {
 
 	register("GET", "/v1/GetUserInfo/{uuid}", controller.GetUserInfo, nil)
 
-	register("GET", "/ws/{room}", controller.StartWebSocket, nil)
+	register("GET", "/test/", controller.Test, nil)
 
 }
 

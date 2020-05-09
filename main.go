@@ -6,12 +6,13 @@ import (
 	"Vegeter/router"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
+	_ "github.com/heroku/x/hmetrics/onload"
 	"github.com/rs/cors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 var Log *logrus.Entry
@@ -34,8 +35,8 @@ func main() {
 		// Enable Debugging for testing, consider disabling in production
 		AllowedMethods: []string{"GET", "UPDATE", "PUT", "POST", "DELETE"},
 	})
-
-	log.Fatal(http.ListenAndServe(":8088", c.Handler(router)))
+	port := os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(":"+port, c.Handler(router)))
 
 }
 

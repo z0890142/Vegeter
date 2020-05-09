@@ -2,4 +2,4 @@ build:
     languages:
         - go
 run :
-    worker : vegeter
+    web : vegeter

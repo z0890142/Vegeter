@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine as build
+FROM golang:1.14-alpine as build_base
 LABEL stage=builder
 RUN apk add ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -16,7 +16,7 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 RUN go build -o /vegeter .
 
-FROM heroku/heroku:16
+FROM heroku/heroku:18
 EXPOSE 80
 COPY --from=server_builder /vegeter /vegeter
 CMD ["/vegeter"]

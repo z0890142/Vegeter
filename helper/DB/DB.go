@@ -2,9 +2,13 @@ package DB
 
 import (
 	"Vegeter/model"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"io/ioutil"
+	"log"
 
-	_ "github.com/go-sql-driver/mysql" //前面加 _ 是為了只讓他執行init
+	"github.com/go-sql-driver/mysql" //前面加 _ 是為了只讓他執行init
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -12,8 +16,35 @@ import (
 
 var db *sqlx.DB
 
+func SetTls(Log *logrus.Entry) error {
+	rootCertPool := x509.NewCertPool()
+	pem, err := ioutil.ReadFile("./config/db/client-cert.pem")
+	if err != nil {
+		Log.WithFields(logrus.Fields{
+			"error": err,
+		}).Error("ioutil.ReadFile error")
+		return err
+	}
+	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
+		log.Fatal("Failed to append PEM.")
+	}
+	clientCert := make([]tls.Certificate, 0, 1)
+	certs, err := tls.LoadX509KeyPair("./config/db/client-cert.pem", "./config/db/client-key.pem")
+	if err != nil {
+		log.Fatal(err)
+	}
+	clientCert = append(clientCert, certs)
+	mysql.RegisterTLSConfig("custom", &tls.Config{
+		RootCAs:      rootCertPool,
+		Certificates: clientCert,
+	})
+
+	return nil
+}
+
 func CreateDbConn(driveName string, dataSourceName string, Log *logrus.Entry) error {
 	var err error
+	// SetTls(Log)
 	db, err = sqlx.Open(driveName, dataSourceName)
 	db.SetConnMaxLifetime(100)
 	db.SetMaxIdleConns(10)

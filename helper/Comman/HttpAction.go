@@ -15,23 +15,15 @@ import (
 )
 
 func ResponseWithJson(w http.ResponseWriter, code int, payload interface{}, Log *logrus.Entry) error {
-	start := time.Now().In(time.FixedZone("CST", 28800))
 
 	response, err := json.Marshal(payload)
-	Log.WithFields(logrus.Fields{
-		"start":            start.Format("2006-01-02T15:04:05.000000"),
-		"elapsed time(ms)": time.Since(start).Milliseconds(),
-	}).Info("ResponseWithJson Marshal Done")
+
 	if err != nil {
 		return err
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	_, err = w.Write(response)
-
-	Log.WithFields(logrus.Fields{
-		"elapsed time(ms)": time.Since(start).Milliseconds(),
-	}).Info("ResponseWithJson response Write Done")
 
 	return err
 }

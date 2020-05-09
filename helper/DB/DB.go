@@ -130,7 +130,7 @@ func UpdatePrice(price model.Price) error {
 }
 
 func GetCurrentPrice(uuid string) (price int, err error) {
-	sqlString := "select Price from Price where UUID=? and isOverTime=0"
+	sqlString := "select Price from Price where UUID=? and isOverTime=0 order by Price desc"
 	err = db.QueryRow(sqlString, uuid).Scan(&price)
 	if err != nil {
 		err = fmt.Errorf("Get CurrentPrice : %v", err)
@@ -143,7 +143,7 @@ func GetPriceRecord(uuid string) (priceList []model.PriceList, err error) {
 	sqlString := "select P.Price,P.Date,u.IslandsName,u.UserName,P.isOverTime " +
 		"from Price as P join User as u on P.UUID=u.UUID " +
 		"where (P.UUID in (select User1 from FriendShip where User2=? and Relationship=2)) or " +
-		"(P.UUID in (select User2 from FriendShip where User1=? and Relationship=2)) or P.UUID=?"
+		"(P.UUID in (select User2 from FriendShip where User1=? and Relationship=2)) or P.UUID=? order by Price desc"
 	rows, err := db.Query(sqlString, uuid, uuid, uuid)
 	if err != nil {
 		err = fmt.Errorf("Get CurrentPrice : %v", err)
@@ -211,7 +211,7 @@ func GetFriend(uuid string) ([]model.FirendList, error) {
 func GetAllPriceRecord() (priceList []model.PriceList, err error) {
 	sqlString := "select P.Price,P.Date,u.IslandsName,u.UserName,P.isOverTime,P.UUID " +
 		"from Price as P join User as u on P.UUID=u.UUID " +
-		"where P.isOverTime=0"
+		"where P.isOverTime=0 order by Price desc"
 	rows, err := db.Query(sqlString)
 	if err != nil {
 		err = fmt.Errorf("Get AllPriceRecord : %v", err)

@@ -26,6 +26,8 @@ func init() {
 
 func main() {
 	DB.CreateDbConn("mysql", "developer:smap01@tcp(34.80.172.124:3306)/vegeter", Log)
+	// DB.CreateDbConn("mysql", "vegeter:smap01@tcp(127.0.0.1:3306)/vegeter", Log)
+
 	router := router.NewRouter()
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -36,6 +38,8 @@ func main() {
 		AllowedMethods: []string{"GET", "UPDATE", "PUT", "POST", "DELETE"},
 	})
 	port := os.Getenv("PORT")
+	// port := "80"
+
 	log.Fatal(http.ListenAndServe(":"+port, c.Handler(router)))
 
 }

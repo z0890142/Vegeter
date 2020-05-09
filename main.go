@@ -23,7 +23,7 @@ func init() {
 }
 
 func main() {
-	DB.CreateDbConn("mysql", viper.GetString("DB.connectString"), Log)
+	DB.CreateDbConn("mysql", "developer:smap01@tcp(34.80.172.124:3306)/vegeter", Log)
 	router := router.NewRouter()
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -34,7 +34,7 @@ func main() {
 		AllowedMethods: []string{"GET", "UPDATE", "PUT", "POST", "DELETE"},
 	})
 
-	log.Fatal(http.ListenAndServe(":80", c.Handler(router)))
+	log.Fatal(http.ListenAndServe(":8088", c.Handler(router)))
 
 }
 

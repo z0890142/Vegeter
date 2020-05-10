@@ -25,8 +25,7 @@ func init() {
 }
 
 func main() {
-	DB.CreateDbConn("mysql", "developer:smap01@tcp(34.80.172.124:3306)/vegeter", Log)
-	// DB.CreateDbConn("mysql", "vegeter:smap01@tcp(127.0.0.1:3306)/vegeter", Log)
+	DB.CreateDbConn("mysql", viper.GetString("DB.connectString"), Log)
 
 	router := router.NewRouter()
 	c := cors.New(cors.Options{
